@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <string.h>
 extern int yylex();
 void yyerror(const char *s);
 %}
@@ -9,21 +10,20 @@ void yyerror(const char *s);
         char name[100];
 }
 
-%token SY VAR NUM EQ
+%token SY VAR NUM EQ 
 %type<ival> NUM
 %type<name> VAR 
 
 %%
-input: line '\n' { printf("Parsed successfully.\n"); }
+input: line { printf("Parsed successfully.\n"); }
      ;
-
 line: SY VAR EQ NUM { printf("Syntax: %s = %d\n", $2, $4); }
     ;
 
 %%
-
 void yyerror(const char *s) {
-    fprintf(stderr, "Error: %s\n", s);
+    if (strlen(s)>0) 
+         fprintf(stderr, "Error: <%s>\n", s);
 }
 
 int main() {
