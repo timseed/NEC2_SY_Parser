@@ -10,14 +10,16 @@ void yyerror(const char *s);
         char name[100];
 }
 
-%token SY VAR NUM EQ 
+%token SY VAR NUM EQ EOL
 %type<ival> NUM
 %type<name> VAR 
 
 %%
-input: line { printf("Parsed successfully.\n"); }
-     ;
-line: SY VAR EQ NUM { printf("Syntax: %s = %d\n", $2, $4); }
+input: /* empty */
+    | line input
+    ;
+
+line: SY VAR EQ NUM EOL { printf("Syntax: %s = %d\n", $2, $4)};
     ;
 
 %%
